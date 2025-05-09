@@ -14,7 +14,26 @@ app = Client(
     bot_token=BOT_TOKEN
 )
 
-@app.on_message(filters.private & filters.text)
+@app.on_message(filters.command("start"))
+def start_command(client, message):
+    message.reply(
+        "**Welcome to the FilmyZilla TXT Extractor Bot!**\n"
+        "Send me a FilmyZilla *category page link* like:\n"
+        "`https://www.filmyzilla0.com/category/398/...`
+"
+        "and I will extract direct download links for you!"
+    )
+
+@app.on_message(filters.command("help"))
+def help_command(client, message):
+    message.reply(
+        "**Help - TXT Extractor Bot**\n"
+        "Just send a FilmyZilla category page link, for example:\n"
+        "`https://www.filmyzilla0.com/category/398/2025-latest-bollywood-movies/default/1.html`\n\n"
+        "The bot will reply with direct TXT download links of movies."
+    )
+
+@app.on_message(filters.private & filters.text & ~filters.command(["start", "help"]))
 def extract_links(client, message):
     url = message.text.strip()
     if "filmyzilla0.com/category/" not in url:
@@ -51,14 +70,11 @@ def extract_links(client, message):
                         href = a["href"]
                         if "workers.dev" in href and (".mkv" in href or ".mp4" in href):
                             filename = href.split("/")[-1]
-                            final_links.append(f"**{filename}**
-{href}
-")
+                            final_links.append(f"**{filename}**\n{href}\n")
                             break
 
         if final_links:
-            output = "
-".join(final_links)
+            output = "\n".join(final_links)
             msg.edit(output[:4096])
         else:
             msg.edit("No working links found.")
