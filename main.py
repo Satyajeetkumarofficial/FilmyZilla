@@ -19,8 +19,7 @@ def start_command(client, message):
     message.reply(
         "**Welcome to the FilmyZilla TXT Extractor Bot!**\n"
         "Send me a FilmyZilla *category page link* like:\n"
-        "`https://www.filmyzilla0.com/category/398/...`
-"
+        "`https://www.filmyzilla0.com/category/398/2025-latest-bollywood-movies/default/1.html`\n"
         "and I will extract direct download links for you!"
     )
 
